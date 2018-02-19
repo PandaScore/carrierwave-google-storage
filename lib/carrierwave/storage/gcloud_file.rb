@@ -90,7 +90,7 @@ module CarrierWave
         if uploader.asset_host
           "#{uploader.asset_host}/#{path}"
         else
-          file.public_url.to_s
+          file && file.public_url.to_s
         end
       end
 
