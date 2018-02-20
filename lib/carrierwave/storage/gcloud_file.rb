@@ -32,7 +32,7 @@ module CarrierWave
       end
 
       def delete
-        deleted = file.delete
+        deleted = file ? file.delete : true
         @file = nil if deleted
         deleted
       end
@@ -51,10 +51,12 @@ module CarrierWave
       end
 
       def read
+        potential_file = exists? && file
+        return "" unless potential_file
         tmp_file = Tempfile.new(
-          CarrierWave::Support::UriFilename.filename(file.name)
+          CarrierWave::Support::UriFilename.filename(potential_file.name)
         )
-        (file.download tmp_file.path, verify: :all).read
+        (potential_file.download tmp_file.path, verify: :all).read
       end
 
       def store(new_file)
